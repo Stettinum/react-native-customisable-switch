@@ -45,7 +45,7 @@ export default class Switch extends Component {
     activeTextColor: 'rgba(255, 255, 255, 1)',
     inactiveTextColor: 'rgba(255, 255, 255, 1)',
     activeBackgroundColor: 'rgba(50, 163, 50, 1)',
-    inactiveBackgroundColor: 'rgba(137, 137, 137, 1)',
+    inactiveBackgroundColor: 'rgba(255, 255, 255, 1)',
     activeButtonBackgroundColor: 'rgba(255, 255, 255, 1)',
     inactiveButtonBackgroundColor: 'rgba(255, 255, 255, 1)',
     switchWidth: 70,
