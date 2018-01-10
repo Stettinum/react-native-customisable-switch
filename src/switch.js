@@ -15,7 +15,7 @@ export default class Switch extends Component {
     onChangeValue: React.PropTypes.func,
     activeText: React.PropTypes.string,
     inactiveText: React.PropTypes.string,
-    fontSize: React.PropTypes.number, 
+    fontSize: React.PropTypes.number,
     activeTextColor: React.PropTypes.string,
     inactiveTextColor: React.PropTypes.string,
     activeBackgroundColor: React.PropTypes.string,
@@ -44,7 +44,7 @@ export default class Switch extends Component {
     fontSize: 16,
     activeTextColor: 'rgba(255, 255, 255, 1)',
     inactiveTextColor: 'rgba(255, 255, 255, 1)',
-    activeBackgroundColor: 'rgba(50, 163, 50, 1)',
+    activeBackgroundColor: 'rgba(255, 255, 255, 1)',
     inactiveBackgroundColor: 'rgba(255, 255, 255, 1)',
     activeButtonBackgroundColor: 'rgba(255, 255, 255, 1)',
     inactiveButtonBackgroundColor: 'rgba(255, 255, 255, 1)',
@@ -127,7 +127,7 @@ render() {
     } = this.props;
 
     const backgroundColorValue = backgroundColor.interpolate({
-      inputRange: [-90, 90],
+      inputRange: [0, 0],
       outputRange: [
         inactiveBackgroundColor,
         activeBackgroundColor,
@@ -137,7 +137,7 @@ render() {
     const buttonBackgroundColorValue = buttonBackgroundColor.interpolate({
       inputRange: [-90, 90],
       outputRange: [
-        inactiveButtonBackgroundColor, 
+        inactiveButtonBackgroundColor,
         activeButtonBackgroundColor,
       ],
     });
@@ -160,7 +160,7 @@ render() {
         >
           <Animated.View
             style={[
-              { 
+              {
                 backgroundColor: backgroundColorValue,
                 height: switchHeight,
                 width: switchWidth,
@@ -180,21 +180,21 @@ render() {
               ]}
             >
               <View style={styles.textContainer}>
-                <Text style={{ 
+                <Text style={{
                   color: activeTextColor,
                   fontSize,
                 }}>
                   {value ? activeText : ''}
                 </Text>
-              </View>  
+              </View>
               <View style={styles.textContainer}>
-                <Text style={{ 
+                <Text style={{
                   color: inactiveTextColor,
                   fontSize,
                 }}>
                   {value ? '' : inactiveText}
                 </Text>
-              </View>  
+              </View>
             </View>
           </Animated.View>
           <Animated.View style={[
@@ -211,10 +211,10 @@ render() {
                 left: transformValue,
               }
             ]}
-          > 
+          >
           </Animated.View>
         </View>
       </TouchableWithoutFeedback>
     );
   }
-}   
+}
