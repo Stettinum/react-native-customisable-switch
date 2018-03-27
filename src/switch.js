@@ -100,7 +100,12 @@ export default class Switch extends Component {
           toValue: value ? 75 : -75,
           duration: animationTime,
         })
-      ]).start(onChangeValue(value));
+      ]).start(finish => {
+          this.setState({value: value});
+          if(finish) {
+            onChangeValue(value)
+          }
+      });
     });
 
   }
