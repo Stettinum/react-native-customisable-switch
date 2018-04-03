@@ -34,6 +34,7 @@ export default class Switch extends Component {
     buttonBorderWidth: React.PropTypes.number,
     animationTime: React.PropTypes.number,
     padding: React.PropTypes.number,
+    changeImmediately: React.PropTypes.func
   };
 
   static defaultProps = {
@@ -60,6 +61,7 @@ export default class Switch extends Component {
     buttonBorderWidth: 0,
     animationTime: 150,
     padding: 2,
+    changeImmediately: null
   }
 
   constructor(props, context) {
@@ -87,25 +89,43 @@ export default class Switch extends Component {
     const { animationTime, onChangeValue } = this.props;
     this.setState({ value: !this.state.value }, () => {
       const { value } = this.state;
-      Animated.parallel([
-        Animated.spring(this.state.transformValue, {
-          toValue: value ? this.transformValue : this.padding,
-          duration: animationTime,
-        }),
-        Animated.timing(this.state.backgroundColor, {
-          toValue: value ? 75 : -75,
-          duration: animationTime,
-        }),
-        Animated.timing(this.state.buttonBackgroundColor, {
-          toValue: value ? 75 : -75,
-          duration: animationTime,
-        })
-      ]).start(finish => {
-          this.setState({value: value});
-          if(finish) {
-            onChangeValue(value)
-          }
-      });
+      if(this.props.changeImmediately) {
+        this.props.changeImmediately(value);
+        Animated.parallel([
+          Animated.spring(this.state.transformValue, {
+            toValue: value ? this.transformValue : this.padding,
+            duration: animationTime,
+          }),
+          Animated.timing(this.state.backgroundColor, {
+            toValue: value ? 75 : -75,
+            duration: animationTime,
+          }),
+          Animated.timing(this.state.buttonBackgroundColor, {
+            toValue: value ? 75 : -75,
+            duration: animationTime,
+          })
+        ]).start();
+      } else {
+        Animated.parallel([
+          Animated.spring(this.state.transformValue, {
+            toValue: value ? this.transformValue : this.padding,
+            duration: animationTime,
+          }),
+          Animated.timing(this.state.backgroundColor, {
+            toValue: value ? 75 : -75,
+            duration: animationTime,
+          }),
+          Animated.timing(this.state.buttonBackgroundColor, {
+            toValue: value ? 75 : -75,
+            duration: animationTime,
+          })
+        ]).start(finish => {
+            this.setState({value: value});
+            if(finish) {
+              onChangeValue(value)
+            }
+        });
+      }
     });
 
   }
