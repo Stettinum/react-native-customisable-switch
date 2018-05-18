@@ -73,6 +73,7 @@ export default class Switch extends Component {
       transformValue: new Animated.Value(props.value ? this.transformValue : this.padding),
       backgroundColor: new Animated.Value(props.value ? 90 : -90),
       buttonBackgroundColor: new Animated.Value(props.value ? 90 : -90),
+      animationExecuted: false
     };
   }
 
@@ -89,42 +90,29 @@ export default class Switch extends Component {
     const { animationTime, onChangeValue } = this.props;
     this.setState({ value: !this.state.value }, () => {
       const { value } = this.state;
-      if(this.props.changeImmediately) {
-        this.props.changeImmediately(value);
-        Animated.parallel([
-          Animated.spring(this.state.transformValue, {
-            toValue: value ? this.transformValue : this.padding,
-            duration: animationTime,
-          }),
-          Animated.timing(this.state.backgroundColor, {
-            toValue: value ? 75 : -75,
-            duration: animationTime,
-          }),
-          Animated.timing(this.state.buttonBackgroundColor, {
-            toValue: value ? 75 : -75,
-            duration: animationTime,
-          })
-        ]).start();
-      } else {
-        Animated.parallel([
-          Animated.spring(this.state.transformValue, {
-            toValue: value ? this.transformValue : this.padding,
-            duration: animationTime,
-          }),
-          Animated.timing(this.state.backgroundColor, {
-            toValue: value ? 75 : -75,
-            duration: animationTime,
-          }),
-          Animated.timing(this.state.buttonBackgroundColor, {
-            toValue: value ? 75 : -75,
-            duration: animationTime,
-          })
-        ]).start(finish => {
-            this.setState({value: value});
-            if(finish) {
-              onChangeValue(value)
-            }
-        });
+      if(!this.state.animationExecuted) {
+        if(this.props.changeImmediately) {
+          this.props.changeImmediately(value);
+          this.setState({animationExecuted: true})
+
+          Animated.parallel([
+            Animated.spring(this.state.transformValue, {
+              toValue: value ? this.transformValue : this.padding,
+              duration: animationTime,
+            }),
+            Animated.timing(this.state.backgroundColor, {
+              toValue: value ? 75 : -75,
+              duration: animationTime,
+            }),
+            Animated.timing(this.state.buttonBackgroundColor, {
+              toValue: value ? 75 : -75,
+              duration: animationTime,
+            })
+          ]).start(finish => {
+            if(finish) this.setState({ animationExecuted: false })
+          });
+
+        }
       }
     });
 
@@ -181,7 +169,9 @@ render() {
 
     return (
       <TouchableWithoutFeedback
-        onPress={this.startGroupAnimations}
+        onPress={() => {
+          this.startGroupAnimations();
+        }}
       >
         <View
           style={[
