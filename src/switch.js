@@ -92,8 +92,9 @@ export default class Switch extends Component {
       const { value } = this.state;
       if(!this.state.animationExecuted) {
         if(this.props.changeImmediately) {
-          this.props.changeImmediately(value);
           this.setState({animationExecuted: true})
+          // change just after animation is executed
+          setTimeout(() => {this.props.changeImmediately(value)}, 200)
 
           Animated.parallel([
             Animated.spring(this.state.transformValue, {
@@ -109,7 +110,9 @@ export default class Switch extends Component {
               duration: animationTime,
             })
           ]).start(finish => {
-            if(finish) this.setState({ animationExecuted: false })
+            if(finish) {
+              this.setState({ animationExecuted: false })
+            }
           });
 
         }
